@@ -21,6 +21,10 @@ const Upload = ({ onComplete }: UploadProps) => {
         setProgress(0);
 
         const reader = new FileReader();
+        reader.onerror = () => {
+            setFile(null);
+            setProgress(0);
+        };
 
         reader.onload = () => {
             const base64Data = reader.result as string;
@@ -69,7 +73,8 @@ const Upload = ({ onComplete }: UploadProps) => {
 
         setIsDragging(false);
         const droppedFile = e.dataTransfer.files[0];
-        if (droppedFile) {
+        const allowedFiles = ['image/png', 'image/jpg', 'image/jpeg'];
+        if (droppedFile && allowedFiles.includes(droppedFile.type)) {
             processFile(droppedFile);
         }
     };
